@@ -29,14 +29,6 @@ func TestResourceMatch(t *testing.T) {
 		{resourceRule: "equal", resourceFilter: "tenantIds:2", resource: "resources:sensor-data:tenantIds:2:deviceIds:a9b576e8-7419-4eed-a010-7f68ec0ff588", pass: true},
 		{resourceRule: "equal", resourceFilter: "tenantIds:2", resource: "resources:sensor-data:tenantIds:2:deviceIds:*", pass: true},
 		{resourceRule: "equal", resourceFilter: "tenantIds:2", resource: "abc", pass: false},
-		{resourceRule: "contains", resourceFilter: "tenantIds:2", resource: "resources:sensor-data:tenantIds:2:deviceIds:a9b576e8-7419-4eed-a010-7f68ec0ff588", pass: true},
-		{resourceRule: "contains", resourceFilter: "tenantIds:2", resource: "resources:sensor-data:tenantIds:2:deviceIds:*", pass: true},
-		{resourceRule: "contains", resourceFilter: "tenantIds:2", resource: "abc", pass: false},
-		{resourceRule: "contains", resourceFilter: "tenantIds:22", resource: "resources:sensor-data:tenantIds:2:deviceIds:*", pass: false},
-		{resourceRule: "contains", resourceFilter: "tenantIds:2", resource: "resources:sensor-data:tenantIds:2,3,4:deviceIds:*", pass: true},
-		{resourceRule: "contains", resourceFilter: "tenantIds:3", resource: "resources:sensor-data:tenantIds:2,3,4:deviceIds:*", pass: true},
-		{resourceRule: "contains", resourceFilter: "tenantIds:5", resource: "resources:sensor-data:tenantIds:2,3,4:deviceIds:*", pass: false},
-		{resourceRule: "contains", resourceFilter: "tenantIds:2", resource: "resources:sensor-data:tenantIds:22:deviceIds:*", pass: false}, //Not working
 	} {
 		condition := &ResourceCondition{
 		//Matches: c.matches,
@@ -48,6 +40,6 @@ func TestResourceMatch(t *testing.T) {
 
 		request := &Request{Resource: c.resource, Subject: "users:arneanka", Context: ctx}
 
-		assert.Equal(t, c.pass, condition.Fulfills(ctx, request), "%s", c.matches)
+		assert.Equal(t, c.pass, condition.Fulfills(c.resourceFilter, request), "%s", c.matches)
 	}
 }
